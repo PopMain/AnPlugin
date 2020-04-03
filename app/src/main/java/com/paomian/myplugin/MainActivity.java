@@ -5,6 +5,7 @@ import dalvik.system.DexFile;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
+                        /**
+                         * asset中的app2.apk复制到应用缓存目录 （data/user/0/com.paomian.myplugin/app_plugin/app2.apk）
+                         */
                         File file = MainApplication.getApplication().getDir("plugin", Context.MODE_PRIVATE);
                         if (!file.exists()) {
                             file.mkdirs();
@@ -64,11 +68,21 @@ public class MainActivity extends AppCompatActivity {
                         String[] dexPath = new String[1];
                         DexFile[] dexFiles = new DexFile[1];
                         dexPath[0] = file.getAbsolutePath();
-                        File outPutDexFile = new File(file, "app.dex");
+                        /**
+                         * opt dex文件保存路径 data/user/0/com.paomian.myplugin/app_plugin/app.dex
+                         */
+                        File outPutDexFile = new File(file, "app2.dex");
                         try {
+                            // loaddex: param1 Android/data/com.paomian.myplugin/plugin/app2.apk; param2 Android/data/com.paomian.myplugin/plugin/app.dex
+                            Log.d("wzx", "pluginPath = " + file.getAbsolutePath() + " \n " +
+                                    " apkFilePath " + apkFile.getAbsolutePath() + " \n " +
+                                    " dexOutputPath " + outPutDexFile.getAbsolutePath());
                             DexFile dexFile = DexFile.loadDex(apkFile.getAbsolutePath(), outPutDexFile.getAbsolutePath(), 0);
                             dexFiles[0] = dexFile;
                             ClassLoader classLoader = MainApplication.getApplication().getClassLoader();
+                            /**
+                             * 把/data/user/0/com.paomian.myplugin/app_plugin/目录、DexFile路径加到 DexClassLoader.pathList.dexElements的数组中去
+                             */
                             Util.V_14.expandDexPathList(classLoader, dexPath, dexFiles);
                             try {
                                 Class clz = Class.forName("com.paomian.app2.util.Caculator");

@@ -3,12 +3,9 @@ package com.paomian.myplugin.plugin;
 import android.os.Build;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import dalvik.system.DexClassLoader;
@@ -42,6 +39,14 @@ public class Util {
            return true;
        }
 
+       /**
+        * 构造 DexElement
+        * @param pkg
+        * @param dexFile
+        * @param isDirectory
+        * @return
+        * @throws Exception
+        */
        private static Object makeDexElement(File pkg, DexFile dexFile, boolean isDirectory) throws Exception {
            if (sDexElementClass == null) {
                sDexElementClass = Class.forName("dalvik.system.DexPathList$Element");
@@ -89,6 +94,13 @@ public class Util {
            return null;
        }
 
+       /**
+        * 把dexelements拼接到DexClassLoader.pathList的dexElements的field里
+        * @param cl
+        * @param elements
+        * @throws NoSuchFieldException
+        * @throws IllegalAccessException
+        */
        private static void fillDexPathList(ClassLoader cl, Object[] elements)
                throws NoSuchFieldException, IllegalAccessException {
            if (sPathListField == null) {
