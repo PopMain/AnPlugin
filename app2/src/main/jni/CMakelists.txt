@@ -1,0 +1,12 @@
+
+add_library(
+    caculator
+    SHARED
+    com_paomian_app2_util_NativeCaculator.cpp
+)
+
+
+target_link_libraries(caculator
+        android
+        log
+        )
