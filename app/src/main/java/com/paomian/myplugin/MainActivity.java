@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
                                }
                                ReflectUtil.V_14.expandNativeLibraryDirectories(classLoader, libFiles);
                            }
+                           String[] resPaths = new String[2];
+                           resPaths[0] = MainApplication.getApplication().getPackageResourcePath();
+                           resPaths[1] = apkFile.getPath();
+                            ReflectUtil.mergeResources(MainApplication.getApplication(), MainApplication.getActivityThread(), resPaths);
                             try {
                                 Class clz = Class.forName("com.paomian.app2.util.NativeCaculator");
                                 Method method = clz.getMethod("add", null);
